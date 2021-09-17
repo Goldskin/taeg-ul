@@ -1,25 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  Container,
+  createTheme,
+  ThemeProvider,
+  useMediaQuery,
+} from "@mui/material";
+import { Form } from "./templates";
+import { useMemo } from "react";
+import AppHeader from "./templates/AppHeader/AppHeader";
 
 function App() {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? "dark" : "light",
+        },
+      }),
+    [prefersDarkMode]
+  );
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <AppHeader />
+      <Container maxWidth="sm">
+        <Form />
+      </Container>
+    </ThemeProvider>
   );
 }
 
