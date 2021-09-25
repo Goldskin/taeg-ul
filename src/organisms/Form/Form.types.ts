@@ -8,6 +8,7 @@ export enum FORM_FIELDS {
 export enum TIME_TYPE {
   YEAR = "year",
   MONTH = "month",
+  DAY = "day",
 }
 
 export interface FormValues {

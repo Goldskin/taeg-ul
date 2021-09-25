@@ -10,23 +10,17 @@ import { TIME_TYPE } from "../Form/Form.types";
 const YEAR_TIME = 364.25;
 
 const columns = [
-  { field: "id", headerName: "Month", width: 90, type: "number" },
+  { field: "id", headerName: "Month", type: "number" },
   {
     field: "refund",
     headerName: "Refund €",
-    width: 150,
+    // width: 150,
     type: "number",
   },
   {
     field: "total",
     headerName: "Total €",
-    width: 150,
-    type: "number",
-  },
-  {
-    field: "test",
-    headerName: "test",
-    width: 150,
+    // width: 150,
     type: "number",
   },
 ];
@@ -47,6 +41,43 @@ const caculTaeg = ({
   return !Number.isNaN(result) && Number.isFinite(result) ? result : 0;
 };
 
+const getMultiplierForMonth = (type: TIME_TYPE, totalTime: number) => {
+  switch (type) {
+    case TIME_TYPE.YEAR:
+      return Math.ceil(totalTime * 12);
+    case TIME_TYPE.DAY:
+      return Math.ceil((totalTime / YEAR_TIME) * 12);
+    case TIME_TYPE.MONTH:
+      return totalTime;
+    default:
+      return 0;
+  }
+};
+const getMultiplierForDay = (type: TIME_TYPE, totalTime: number) => {
+  switch (type) {
+    case TIME_TYPE.YEAR:
+      return Math.ceil(totalTime * YEAR_TIME);
+    case TIME_TYPE.DAY:
+      return totalTime;
+    case TIME_TYPE.MONTH:
+      return Math.ceil((YEAR_TIME / 12) * totalTime);
+    default:
+      return 0;
+  }
+};
+const getMultiplierForYear = (type: TIME_TYPE, totalTime: number) => {
+  switch (type) {
+    case TIME_TYPE.YEAR:
+      return totalTime;
+    case TIME_TYPE.DAY:
+      return totalTime / YEAR_TIME;
+    case TIME_TYPE.MONTH:
+      return totalTime / 12;
+    default:
+      return 0;
+  }
+};
+
 const Calculator: FunctionComponent = () => {
   const { control } = useCalculateFormContext();
   const values = useWatch({ control });
@@ -57,9 +88,10 @@ const Calculator: FunctionComponent = () => {
   const typeTime = values.typeTime || TIME_TYPE.YEAR;
 
   const totalTime = Number(values.borrowedTime || 0);
-  const totalMonths = totalTime * (typeTime === TIME_TYPE.YEAR ? 12 : 1);
-  const totalDays = (YEAR_TIME / 12) * totalMonths;
-  const totalYears = totalDays / YEAR_TIME;
+  const totalYears = getMultiplierForYear(typeTime, totalTime);
+  const totalMonths = getMultiplierForMonth(typeTime, totalTime);
+  const totalDays = getMultiplierForDay(typeTime, totalTime);
+  console.log({ totalYears, totalMonths, totalDays });
   const totalRefund = totalMonths * refundPerMonth;
 
   const rows = Array(totalMonths)
@@ -76,11 +108,23 @@ const Calculator: FunctionComponent = () => {
   return (
     <>
       <Grid container spacing={2} sx={{ marginTop: 1 }}>
-        <Grid item xs={6} sx={{ marginTop: 2 }}>
+        <Grid item xs={4} sx={{ marginTop: 2 }}>
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
               <Stack spacing={0.5}>
-                <Typography fontWeight={700}>Month</Typography>
+                <Typography fontWeight={700}>Years</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {numberWithSpaces(Number(totalYears.toFixed(1)))}
+                </Typography>
+              </Stack>
+            </Box>
+          </Card>
+        </Grid>
+        <Grid item xs={4} sx={{ marginTop: 2 }}>
+          <Card>
+            <Box sx={{ p: 2, display: "flex" }}>
+              <Stack spacing={0.5}>
+                <Typography fontWeight={700}>Months</Typography>
                 <Typography variant="body2" color="text.secondary">
                   {numberWithSpaces(totalMonths)}
                 </Typography>
@@ -88,7 +132,7 @@ const Calculator: FunctionComponent = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: 2 }}>
+        <Grid item xs={4} sx={{ marginTop: 2 }}>
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
               <Stack spacing={0.5}>
