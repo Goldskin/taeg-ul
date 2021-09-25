@@ -4,7 +4,6 @@ import {
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
-import { Form } from "./organisms";
 
 import { useMemo } from "react";
 import AppHeader from "./organisms/AppHeader/AppHeader";
@@ -29,7 +28,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <AppHeader />
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Layout />
       </Container>
     </ThemeProvider>
