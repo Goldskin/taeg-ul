@@ -2,12 +2,16 @@ import { Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { FunctionComponent } from "react";
 import { useWatch } from "react-hook-form";
-import { numberWithSpaces } from "../../helpers";
+import {
+  calculateTaeg,
+  getDays,
+  getMonths,
+  getYears,
+  numberWithSpaces,
+} from "../../helpers";
 import useCalculateFormContext from "../Form/useCalculateFormContext";
 import { DataGrid } from "@mui/x-data-grid";
 import { UNIT_TIME } from "../Form/Form.types";
-
-const YEAR_TIME = 364.25;
 
 const columns = [
   { field: "id", headerName: "Month", type: "number" },
@@ -25,61 +29,6 @@ const columns = [
   },
 ];
 
-const caculateTaeg = ({
-  totalToBorrow,
-  totalToRefund,
-  totalYears,
-}: {
-  totalToBorrow: number;
-  totalToRefund: number;
-  totalYears: number;
-}) => {
-  const subRate = totalToRefund / totalToBorrow;
-
-  const result = Math.pow(subRate, 1 / totalYears);
-
-  console.log({ subRate, totalYears, result });
-
-  return !Number.isNaN(result) && Number.isFinite(result) ? result - 1 : 0;
-};
-
-const getMultiplierForMonth = (type: UNIT_TIME, totalTime: number) => {
-  switch (type) {
-    case UNIT_TIME.YEAR:
-      return Math.ceil(totalTime * 12);
-    case UNIT_TIME.DAY:
-      return Math.ceil((totalTime / YEAR_TIME) * 12);
-    case UNIT_TIME.MONTH:
-      return totalTime;
-    default:
-      return 0;
-  }
-};
-const getMultiplierForDay = (type: UNIT_TIME, totalTime: number) => {
-  switch (type) {
-    case UNIT_TIME.YEAR:
-      return Math.ceil(totalTime * YEAR_TIME);
-    case UNIT_TIME.DAY:
-      return totalTime;
-    case UNIT_TIME.MONTH:
-      return Math.ceil((YEAR_TIME / 12) * totalTime);
-    default:
-      return 0;
-  }
-};
-const getMultiplierForYear = (type: UNIT_TIME, totalTime: number) => {
-  switch (type) {
-    case UNIT_TIME.YEAR:
-      return totalTime;
-    case UNIT_TIME.DAY:
-      return totalTime / YEAR_TIME;
-    case UNIT_TIME.MONTH:
-      return totalTime / 12;
-    default:
-      return 0;
-  }
-};
-
 const Calculator: FunctionComponent = () => {
   const { control } = useCalculateFormContext();
   const values = useWatch({ control });
@@ -88,9 +37,9 @@ const Calculator: FunctionComponent = () => {
   const typeTime = values.unitTime || UNIT_TIME.YEAR;
 
   const totalTime = Number(values.borrowedTime || 0);
-  const totalYears = getMultiplierForYear(typeTime, totalTime);
-  const totalMonths = getMultiplierForMonth(typeTime, totalTime);
-  const totalDays = getMultiplierForDay(typeTime, totalTime);
+  const totalYears = getYears(typeTime, totalTime);
+  const totalMonths = getMonths(typeTime, totalTime);
+  const totalDays = getDays(typeTime, totalTime);
 
   const refund = Number(values.refound || 0);
   const refundType = values.borrowType || UNIT_TIME.MONTH;
@@ -166,11 +115,11 @@ const Calculator: FunctionComponent = () => {
               <Stack>
                 <Typography fontWeight={700}>TAEG</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {caculateTaeg({
+                  {calculateTaeg({
                     totalToBorrow,
                     totalToRefund,
                     totalYears,
-                  }).toFixed(4)}{" "}
+                  }).toFixed(4)}
                   %
                 </Typography>
               </Stack>
