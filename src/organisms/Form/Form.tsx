@@ -67,14 +67,11 @@ const Form: FunctionComponent = () => {
       <Card sx={{ marginTop: 2 }}>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item sm={6} xs={12}>
+            <Grid item sm={12} xs={12}>
               <MoneyInput
                 {...register(FORM_FIELDS.AMOUNT_TO_BORROW)}
                 autoFocus
               />
-            </Grid>
-            <Grid item sm={6} xs={12}>
-              <RateInput {...register(FORM_FIELDS.RATE)} />
             </Grid>
           </Grid>
         </CardContent>

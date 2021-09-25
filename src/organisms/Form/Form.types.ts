@@ -23,6 +23,5 @@ export interface FormValues {
   [FORM_FIELDS.AMOUNT_TO_BORROW]: number;
   [FORM_FIELDS.BORROW_TYPE]: BORROW_TYPE;
   [FORM_FIELDS.BORROWED_TIME]: number;
-  [FORM_FIELDS.RATE]: number;
   [FORM_FIELDS.REFUND]: number;
 }
