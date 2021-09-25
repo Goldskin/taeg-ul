@@ -3,9 +3,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Form } from "../../organisms";
 import Calculator from "../../organisms/Calculator";
 import {
+  BORROW_TYPE,
   FormValues,
   FORM_FIELDS,
-  TIME_TYPE,
+  UNIT_TIME,
 } from "../../organisms/Form/Form.types";
 
 interface LayoutProps {}
@@ -13,10 +14,11 @@ interface LayoutProps {}
 const Layout: FunctionComponent<LayoutProps> = ({}) => {
   const formContext = useForm<FormValues>({
     defaultValues: {
-      [FORM_FIELDS.AMOUNT_TO_BORROW]: 120000,
-      [FORM_FIELDS.BORROWED_TIME]: 10,
+      [FORM_FIELDS.AMOUNT_TO_BORROW]: 1000,
+      [FORM_FIELDS.BORROWED_TIME]: 19,
       [FORM_FIELDS.REFUND_PER_MONTH]: 1200,
-      [FORM_FIELDS.TYPE_TIME]: TIME_TYPE.YEAR,
+      [FORM_FIELDS.UNIT_TIME]: UNIT_TIME.MONTH,
+      [FORM_FIELDS.BORROW_TYPE]: BORROW_TYPE.TOTAL,
     },
   });
   return (

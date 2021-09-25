@@ -5,7 +5,7 @@ import { useWatch } from "react-hook-form";
 import { numberWithSpaces } from "../../helpers";
 import useCalculateFormContext from "../Form/useCalculateFormContext";
 import { DataGrid } from "@mui/x-data-grid";
-import { TIME_TYPE } from "../Form/Form.types";
+import { UNIT_TIME } from "../Form/Form.types";
 
 const YEAR_TIME = 364.25;
 
@@ -41,37 +41,37 @@ const caculTaeg = ({
   return !Number.isNaN(result) && Number.isFinite(result) ? result : 0;
 };
 
-const getMultiplierForMonth = (type: TIME_TYPE, totalTime: number) => {
+const getMultiplierForMonth = (type: UNIT_TIME, totalTime: number) => {
   switch (type) {
-    case TIME_TYPE.YEAR:
+    case UNIT_TIME.YEAR:
       return Math.ceil(totalTime * 12);
-    case TIME_TYPE.DAY:
+    case UNIT_TIME.DAY:
       return Math.ceil((totalTime / YEAR_TIME) * 12);
-    case TIME_TYPE.MONTH:
+    case UNIT_TIME.MONTH:
       return totalTime;
     default:
       return 0;
   }
 };
-const getMultiplierForDay = (type: TIME_TYPE, totalTime: number) => {
+const getMultiplierForDay = (type: UNIT_TIME, totalTime: number) => {
   switch (type) {
-    case TIME_TYPE.YEAR:
+    case UNIT_TIME.YEAR:
       return Math.ceil(totalTime * YEAR_TIME);
-    case TIME_TYPE.DAY:
+    case UNIT_TIME.DAY:
       return totalTime;
-    case TIME_TYPE.MONTH:
+    case UNIT_TIME.MONTH:
       return Math.ceil((YEAR_TIME / 12) * totalTime);
     default:
       return 0;
   }
 };
-const getMultiplierForYear = (type: TIME_TYPE, totalTime: number) => {
+const getMultiplierForYear = (type: UNIT_TIME, totalTime: number) => {
   switch (type) {
-    case TIME_TYPE.YEAR:
+    case UNIT_TIME.YEAR:
       return totalTime;
-    case TIME_TYPE.DAY:
+    case UNIT_TIME.DAY:
       return totalTime / YEAR_TIME;
-    case TIME_TYPE.MONTH:
+    case UNIT_TIME.MONTH:
       return totalTime / 12;
     default:
       return 0;
@@ -85,7 +85,7 @@ const Calculator: FunctionComponent = () => {
 
   const refundPerMonth = Number(values.refundPerMonth || 0);
   const totalToBorrow = Number(values.amountToBorrow || 0);
-  const typeTime = values.typeTime || TIME_TYPE.YEAR;
+  const typeTime = values.unitTime || UNIT_TIME.YEAR;
 
   const totalTime = Number(values.borrowedTime || 0);
   const totalYears = getMultiplierForYear(typeTime, totalTime);
@@ -108,10 +108,10 @@ const Calculator: FunctionComponent = () => {
   return (
     <>
       <Grid container spacing={2} sx={{ marginTop: 1 }}>
-        <Grid item xs={4} sx={{ marginTop: 2 }}>
+        <Grid item xs={4}>
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
-              <Stack spacing={0.5}>
+              <Stack>
                 <Typography fontWeight={700}>Years</Typography>
                 <Typography variant="body2" color="text.secondary">
                   {numberWithSpaces(Number(totalYears.toFixed(1)))}
@@ -120,10 +120,10 @@ const Calculator: FunctionComponent = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={4} sx={{ marginTop: 2 }}>
+        <Grid item xs={4}>
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
-              <Stack spacing={0.5}>
+              <Stack>
                 <Typography fontWeight={700}>Months</Typography>
                 <Typography variant="body2" color="text.secondary">
                   {numberWithSpaces(totalMonths)}
@@ -132,10 +132,10 @@ const Calculator: FunctionComponent = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={4} sx={{ marginTop: 2 }}>
+        <Grid item xs={4}>
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
-              <Stack spacing={0.5}>
+              <Stack>
                 <Typography fontWeight={700}>Days</Typography>
                 <Typography variant="body2" color="text.secondary">
                   {numberWithSpaces(Math.floor(totalDays))}
@@ -144,10 +144,10 @@ const Calculator: FunctionComponent = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: 2 }}>
+        <Grid item xs={6}>
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
-              <Stack spacing={0.5}>
+              <Stack>
                 <Typography fontWeight={700}>
                   Total remboursement hors taeg
                 </Typography>
@@ -158,10 +158,10 @@ const Calculator: FunctionComponent = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: 2 }}>
+        <Grid item xs={6}>
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
-              <Stack spacing={0.5}>
+              <Stack>
                 <Typography fontWeight={700}>taeg</Typography>
                 <Typography variant="body2" color="text.secondary">
                   {caculTaeg({

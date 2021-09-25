@@ -12,57 +12,59 @@ import { Controller, useWatch } from "react-hook-form";
 import { capitalize } from "../../helpers";
 import { MoneyInput, RateInput, RefundInput, TimeInput } from "../../molecules";
 
-import { FORM_FIELDS, TIME_TYPE } from "./Form.types";
+import { BORROW_TYPE, FORM_FIELDS, UNIT_TIME } from "./Form.types";
 import useCalculateFormContext from "./useCalculateFormContext";
 
 const Form: FunctionComponent = () => {
   const { register, control } = useCalculateFormContext();
-  const typeTime = useWatch({
+  const unitType = useWatch({
     control,
-    name: FORM_FIELDS.TYPE_TIME,
+    name: FORM_FIELDS.UNIT_TIME,
+  });
+  const borrowTime = useWatch({
+    control,
+    name: FORM_FIELDS.BORROW_TYPE,
   });
 
   return (
     <>
-      <Card sx={{ marginTop: 4 }}>
+      <Card sx={{ marginTop: 2 }}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item sm={6} xs={12}>
               <FormControl fullWidth>
-                <InputLabel id="select-time-type">type de temps</InputLabel>
+                <InputLabel id="select-time-type">Type de temps</InputLabel>
                 <Controller
                   control={control}
-                  name={FORM_FIELDS.TYPE_TIME}
-                  render={({ field }) => {
-                    return (
-                      <Select
-                        {...field}
-                        fullWidth
-                        labelId="select-time-type"
-                        label="type de temps"
-                      >
-                        {Object.values(TIME_TYPE).map((val) => (
-                          <MenuItem key={val} value={val}>
-                            {capitalize(val)}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    );
-                  }}
+                  name={FORM_FIELDS.UNIT_TIME}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      fullWidth
+                      labelId="select-time-type"
+                      label="Type de temps"
+                    >
+                      {Object.values(UNIT_TIME).map((val) => (
+                        <MenuItem key={val} value={val}>
+                          {capitalize(val)}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
                 />
               </FormControl>
             </Grid>
             <Grid item sm={6} xs={12}>
               <TimeInput
                 {...register(FORM_FIELDS.BORROWED_TIME, { maxLength: 2 })}
-                suffix={typeTime}
+                suffix={unitType}
               />
             </Grid>
           </Grid>
         </CardContent>
       </Card>
 
-      <Card sx={{ marginTop: 4 }}>
+      <Card sx={{ marginTop: 2 }}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item sm={6} xs={12}>
@@ -74,8 +76,42 @@ const Form: FunctionComponent = () => {
             <Grid item sm={6} xs={12}>
               <RateInput {...register(FORM_FIELDS.RATE)} />
             </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+      <Card sx={{ marginTop: 2 }}>
+        <CardContent>
+          <Grid container spacing={2}>
             <Grid item sm={6} xs={12}>
-              <RefundInput {...register(FORM_FIELDS.REFUND_PER_MONTH)} />
+              <FormControl fullWidth>
+                <InputLabel id="select-time-type">
+                  Type de remboursement
+                </InputLabel>
+                <Controller
+                  control={control}
+                  name={FORM_FIELDS.BORROW_TYPE}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      fullWidth
+                      labelId="select-borrow-type"
+                      label="Type de remboursement"
+                    >
+                      {Object.values(BORROW_TYPE).map((val) => (
+                        <MenuItem key={val} value={val}>
+                          {capitalize(val)}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item sm={6} xs={12}>
+              <RefundInput
+                {...register(FORM_FIELDS.REFUND_PER_MONTH)}
+                label={capitalize(borrowTime)}
+              />
             </Grid>
           </Grid>
         </CardContent>

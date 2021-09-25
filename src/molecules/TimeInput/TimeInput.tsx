@@ -4,7 +4,7 @@ import { Input } from "../../atoms";
 import { InputProps } from "../../atoms/Input/Input";
 import { capitalize } from "../../helpers";
 
-interface TimeInputProps extends Omit<InputProps, "label"> {
+interface TimeInputProps extends InputProps {
   suffix: string;
 }
 interface TimeInputWithRefProps extends TimeInputProps {
@@ -14,11 +14,12 @@ interface TimeInputWithRefProps extends TimeInputProps {
 const TimeInput: FunctionComponent<TimeInputWithRefProps> = ({
   forwardedRef,
   suffix,
+  label = "Time",
   ...props
 }) => {
   return (
     <Input
-      label="Time"
+      label={label}
       type="number"
       InputProps={{
         endAdornment: (
