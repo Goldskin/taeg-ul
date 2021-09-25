@@ -25,20 +25,22 @@ const columns = [
   },
 ];
 
-const caculTaeg = ({
+const caculateTaeg = ({
   totalToBorrow,
-  totalRefund,
+  totalToRefund,
   totalYears,
 }: {
   totalToBorrow: number;
-  totalRefund: number;
+  totalToRefund: number;
   totalYears: number;
 }) => {
-  const subRate = totalRefund / totalToBorrow;
+  const subRate = totalToRefund / totalToBorrow;
 
   const result = Math.pow(subRate, 1 / totalYears);
 
-  return !Number.isNaN(result) && Number.isFinite(result) ? result : 0;
+  console.log({ subRate, totalYears, result });
+
+  return !Number.isNaN(result) && Number.isFinite(result) ? result - 1 : 0;
 };
 
 const getMultiplierForMonth = (type: UNIT_TIME, totalTime: number) => {
@@ -81,9 +83,7 @@ const getMultiplierForYear = (type: UNIT_TIME, totalTime: number) => {
 const Calculator: FunctionComponent = () => {
   const { control } = useCalculateFormContext();
   const values = useWatch({ control });
-  console.log(values);
 
-  const refundPerMonth = Number(values.refundPerMonth || 0);
   const totalToBorrow = Number(values.amountToBorrow || 0);
   const typeTime = values.unitTime || UNIT_TIME.YEAR;
 
@@ -91,19 +91,23 @@ const Calculator: FunctionComponent = () => {
   const totalYears = getMultiplierForYear(typeTime, totalTime);
   const totalMonths = getMultiplierForMonth(typeTime, totalTime);
   const totalDays = getMultiplierForDay(typeTime, totalTime);
-  console.log({ totalYears, totalMonths, totalDays });
-  const totalRefund = totalMonths * refundPerMonth;
 
-  const rows = Array(totalMonths)
-    .fill(null)
-    .map((_, index) => {
-      const refundSoFar = (index + 1) * refundPerMonth;
-      return {
-        refund: numberWithSpaces(refundPerMonth),
-        total: numberWithSpaces(refundSoFar),
-        id: index + 1,
-      };
-    });
+  const refund = Number(values.refound || 0);
+  const refundType = values.borrowType || UNIT_TIME.MONTH;
+
+  const totalToRefund =
+    (refundType === UNIT_TIME.MONTH ? totalMonths : 1) * refund;
+
+  // const rows = Array(totalMonths)
+  //   .fill(null)
+  //   .map((_, index) => {
+  //     const refundSoFar = (index + 1) * refund;
+  //     return {
+  //       refund: numberWithSpaces(refund),
+  //       total: numberWithSpaces(refundSoFar),
+  //       id: index + 1,
+  //     };
+  //   });
 
   return (
     <>
@@ -148,11 +152,9 @@ const Calculator: FunctionComponent = () => {
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
               <Stack>
-                <Typography fontWeight={700}>
-                  Total remboursement hors taeg
-                </Typography>
+                <Typography fontWeight={700}>Total refund</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {numberWithSpaces(totalRefund)}
+                  {numberWithSpaces(totalToRefund)}
                 </Typography>
               </Stack>
             </Box>
@@ -162,11 +164,11 @@ const Calculator: FunctionComponent = () => {
           <Card>
             <Box sx={{ p: 2, display: "flex" }}>
               <Stack>
-                <Typography fontWeight={700}>taeg</Typography>
+                <Typography fontWeight={700}>TAEG</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {caculTaeg({
+                  {caculateTaeg({
                     totalToBorrow,
-                    totalRefund,
+                    totalToRefund,
                     totalYears,
                   }).toFixed(4)}{" "}
                   %
@@ -176,7 +178,7 @@ const Calculator: FunctionComponent = () => {
           </Card>
         </Grid>
       </Grid>
-      <Card sx={{ marginTop: 4 }}>
+      {/* <Card sx={{ marginTop: 4 }}>
         <CardContent>
           <div style={{ height: 300 }}>
             <DataGrid
@@ -187,7 +189,7 @@ const Calculator: FunctionComponent = () => {
             />
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </>
   );
 };

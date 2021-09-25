@@ -109,7 +109,7 @@ const Form: FunctionComponent = () => {
             </Grid>
             <Grid item sm={6} xs={12}>
               <RefundInput
-                {...register(FORM_FIELDS.REFUND_PER_MONTH)}
+                {...register(FORM_FIELDS.REFUND)}
                 label={capitalize(borrowTime)}
               />
             </Grid>

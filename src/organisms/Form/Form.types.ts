@@ -4,7 +4,7 @@ export enum FORM_FIELDS {
   BORROW_TYPE = "borrowType",
   BORROWED_TIME = "borrowedTime",
   RATE = "rate",
-  REFUND_PER_MONTH = "refundPerMonth",
+  REFUND = "refound",
 }
 
 export enum UNIT_TIME {
@@ -24,5 +24,5 @@ export interface FormValues {
   [FORM_FIELDS.BORROW_TYPE]: BORROW_TYPE;
   [FORM_FIELDS.BORROWED_TIME]: number;
   [FORM_FIELDS.RATE]: number;
-  [FORM_FIELDS.REFUND_PER_MONTH]: number;
+  [FORM_FIELDS.REFUND]: number;
 }

@@ -9,14 +9,12 @@ import {
   UNIT_TIME,
 } from "../../organisms/Form/Form.types";
 
-interface LayoutProps {}
-
-const Layout: FunctionComponent<LayoutProps> = ({}) => {
+const Layout: FunctionComponent = () => {
   const formContext = useForm<FormValues>({
     defaultValues: {
       [FORM_FIELDS.AMOUNT_TO_BORROW]: 1000,
       [FORM_FIELDS.BORROWED_TIME]: 19,
-      [FORM_FIELDS.REFUND_PER_MONTH]: 1200,
+      [FORM_FIELDS.REFUND]: 1200,
       [FORM_FIELDS.UNIT_TIME]: UNIT_TIME.MONTH,
       [FORM_FIELDS.BORROW_TYPE]: BORROW_TYPE.TOTAL,
     },
