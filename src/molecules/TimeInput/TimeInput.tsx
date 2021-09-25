@@ -1,3 +1,4 @@
+import { InputAdornment } from "@mui/material";
 import React, { FunctionComponent, Ref } from "react";
 import { Input } from "../../atoms";
 import { InputProps } from "../../atoms/Input/Input";
@@ -11,7 +12,17 @@ const TimeInput: FunctionComponent<TimeInputWithRefProps> = ({
   forwardedRef,
   ...props
 }) => {
-  return <Input label="Time" type="number" {...props} ref={forwardedRef} />;
+  return (
+    <Input
+      label="Time"
+      type="number"
+      InputProps={{
+        endAdornment: <InputAdornment position="start">years</InputAdornment>,
+      }}
+      {...props}
+      ref={forwardedRef}
+    />
+  );
 };
 
 TimeInput.displayName = "TimeInput";

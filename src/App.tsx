@@ -4,9 +4,12 @@ import {
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
-import { Form } from "./templates";
+import { Form } from "./organisms";
+
 import { useMemo } from "react";
-import AppHeader from "./templates/AppHeader/AppHeader";
+import AppHeader from "./organisms/AppHeader/AppHeader";
+import { orange } from "@mui/material/colors";
+import Layout from "./templates/Layout";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -16,6 +19,9 @@ function App() {
       createTheme({
         palette: {
           mode: prefersDarkMode ? "dark" : "light",
+          primary: {
+            main: orange.A700,
+          },
         },
       }),
     [prefersDarkMode]
@@ -24,7 +30,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <AppHeader />
       <Container maxWidth="sm">
-        <Form />
+        <Layout />
       </Container>
     </ThemeProvider>
   );
